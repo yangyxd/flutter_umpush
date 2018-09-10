@@ -18,6 +18,8 @@ Flutter 友盟推送
 
 ### 准备工作
 
+在 pubspec.yaml 中加入 flutter-umpush 
+
 #### 申请key
 
 ## 申请key
@@ -34,8 +36,112 @@ Flutter 友盟推送
 ### ios 集成
 
 
-## android 集成
+## Android 集成
 
 1. 将下载回来SDK中（或本项目example）的 push 文件夹复制到你项目的 android 目录中。
 2. 在 push 的 libs 中将缺少的so、jar补全，参考下图
+
 ![image](https://github.com/yangyxd/flutter_umpush/blob/master/raw/img001.png)
+
+3. 修改 android\settings.gradle 文件，加入include ':push'
+```
+include ':app',':push'
+
+def flutterProjectRoot = rootProject.projectDir.parentFile.toPath()
+...
+```
+
+4. 修改 android\app\build.gradle ，在 android 区域中添加 manifestPlaceholders 和 ndk
+
+```
+
+android {
+  ...
+  
+         // 添加的内容
+  
+         manifestPlaceholders = [
+                UMPUSH_PKGNAME : applicationId,
+                UMPUSH_APPKEY : "5b8c9800f29d9836ac000017", //Push上注册的包名对应的appkey.
+                UMPUSH_CHANNEL : "umpush",
+                UMENG_MESSAGE_SECRET : "b11af04a78ddc9c6ca246a7dc8c275d7",
+        ]
+
+        ndk {
+            //选择要添加的对应cpu类型的.so库。
+            abiFilters 'x86', 'x86_64',  'armeabi-v7a'
+            // abiFilters 'armeabi-v7a'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64', 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+        }
+ 
+  
+  ...
+}
+
+```
+
+5. 修改 AndroidManifest.xml
+
+```
+将 application 中的 
+
+android:name="io.flutter.app.FlutterApplication" 
+
+修改为 
+
+android:name="com.yangyxd.flutterumpush.MainApplication"
+
+```
+
+## 使用插件
+
+在 initState() 中初始化和添加监听
+
+```
+    await FlutterUmPush.startup();
+
+    FlutterUmPush.addConnectionChangeListener((bool connected) {
+      setState(() {
+        /// 是否连接，连接了才可以推送
+        print("连接状态改变:$connected");
+        this.isConnected = connected;
+        if (connected) {
+          FlutterUmPush.getRegistrationID().then((String regId) {
+            print("主动获取设备号:$regId");
+            setState(() {});
+          });
+        }
+      });
+    });
+
+    FlutterUmPush.addnetworkDidLoginListener((String registrationId) {
+      setState(() {
+        /// 用于推送
+        print("收到设备号:$registrationId");
+      });
+    });
+
+    FlutterUmPush
+        .addReceiveNotificationListener((PushMessage notification) {
+      setState(() {
+        /// 收到推送
+        print("收到推送提醒: $notification");
+      });
+    });
+
+    FlutterUmPush
+        .addReceiveOpenNotificationListener((PushMessage notification) {
+      setState(() {
+        print("打开了推送提醒: $notification");
+      });
+    });
+
+    FlutterUmPush.addReceiveCustomMsgListener((PushMessage msg) {
+      setState(() {
+        print("收到推送消息提醒: $msg");
+      });
+    });
+    
+```
+
+
