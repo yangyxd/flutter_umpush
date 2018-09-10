@@ -14,15 +14,14 @@ Flutter 友盟推送
 * [x] 可以运行的例子
 * [ ] 用户可相互自行推送
 
+
 ## 集成过程
 
 ### 准备工作
 
 在 pubspec.yaml 中加入 flutter-umpush 
 
-#### 申请key
-
-## 申请key
+### 申请key
 
 进入[这里](http://message.umeng.com/list/new/app)创建或添加已有应用。然后可以在应用信息中看到 Appkey、Umeng Message Secret
 同时在应用信息中可以设置包名为你的app包名。
@@ -36,7 +35,7 @@ Flutter 友盟推送
 ### ios 集成
 
 
-## Android 集成
+### Android 集成
 
 1. 将下载回来SDK中（或本项目example）的 push 文件夹复制到你项目的 android 目录中。
 2. 在 push 的 libs 中将缺少的so、jar补全，参考下图
@@ -144,4 +143,11 @@ android:name="com.yangyxd.flutterumpush.MainApplication"
     
 ```
 
+## License MIT
+
+## 感谢
+本项目直接拿了雪亮的极光推送框架来改的，省了不少时间，在此表示感谢。
+极光推送：https://github.com/best-flutter/flutter_jpush
+
+## 欢迎提交issue或者加入QQ群325337654
 
