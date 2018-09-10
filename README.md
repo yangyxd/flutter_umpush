@@ -37,4 +37,5 @@ Flutter 友盟推送
 ## android 集成
 
 1. 将下载回来SDK中（或本项目example）的 push 文件夹复制到你项目的 android 目录中。
-2. 在 push 的 libs 中将 armebi-v7a 、x86-64 对应的 so 加入，同时将下图所示的jar加入
+2. 在 push 的 libs 中将缺少的so、jar补全，参考下图
+![image](https://github.com/yangyxd/flutter_umpush/blob/master/raw/img001.png)
